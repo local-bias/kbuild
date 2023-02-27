@@ -1,12 +1,11 @@
 const { join, resolve } = require('path');
 const { existsSync, readdirSync } = require('fs');
 const { cwd } = require('process');
+const TerserPlugin = require('terser-webpack-plugin');
 
 const root = join(cwd(), 'src', 'apps');
 
 const allProjects = readdirSync(root);
-
-console.log({ __dirname, __filename });
 
 const entry = allProjects.reduce((acc, dir) => {
   for (const filename of ['index.ts', 'index.js', 'index.mjs']) {
@@ -28,19 +27,26 @@ module.exports = {
     type: 'filesystem',
     buildDependencies: { config: [__filename] },
   },
-
   resolve: {
     extensions: ['.ts', '.tsx', '.js', '.json'],
     alias: { '@': resolve(cwd(), 'src') },
+    fallback: {
+      path: false,
+    },
   },
   output: {
     filename: '[name].js',
     path: resolve(cwd(), 'dist', 'prod'),
   },
   module: {
-    rules: [{ test: /\.[jt]sx?$/, exclude, loader: 'ts-loader' }],
+    rules: [{ test: /\.tsx?$/, exclude, loader: 'ts-loader' }],
   },
   optimization: {
     minimize: true,
+    minimizer: [
+      new TerserPlugin({
+        extractComments: false,
+      }),
+    ],
   },
 };
