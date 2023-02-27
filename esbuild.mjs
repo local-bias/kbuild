@@ -1,3 +1,4 @@
+//@ts-check
 import esbuild from 'esbuild';
 import { existsSync, readdirSync } from 'fs';
 import { join } from 'path';
@@ -6,22 +7,27 @@ import { cwd } from 'process';
 /**
  * @param { 'app' | 'plugin' } mode
  */
-export const run = async (mode) => {
+export const buildWithEsbuild = async (mode) => {
   const root = join(cwd(), 'src', 'apps');
 
   const allProjects = readdirSync(root);
 
-  const entryPoints = allProjects.reduce((acc, dir) => {
-    for (const filename of ['index.ts', 'index.js', 'index.mjs']) {
-      if (existsSync(join(root, dir, filename))) {
-        return [...acc, { in: join(root, dir, filename), out: dir }];
+  const appEntryPoints = allProjects.reduce(
+    /** @param { {in: string; out: string; }[] } acc */ (acc, dir) => {
+      for (const filename of ['index.ts', 'index.js', 'index.mjs']) {
+        if (existsSync(join(root, dir, filename))) {
+          return [...acc, { in: join(root, dir, filename), out: dir }];
+        }
       }
-    }
-    return acc;
-  }, []);
+      return acc;
+    },
+    []
+  );
+
+  const pluginEntryPoints = ['desktop', 'config'].map((dir) => join('src', dir, 'index.ts'));
 
   const context = await esbuild.context({
-    entryPoints,
+    entryPoints: mode === 'app' ? appEntryPoints : pluginEntryPoints,
     bundle: true,
     sourcemap: 'inline',
     platform: 'browser',
