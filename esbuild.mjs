@@ -8,26 +8,29 @@ import { cwd } from 'process';
  * @param { 'app' | 'plugin' } mode
  */
 export const buildWithEsbuild = async (mode) => {
-  const root = join(cwd(), 'src', 'apps');
+  let entryPoints = [];
+  if (mode === 'app') {
+    const root = join(cwd(), 'src', 'apps');
 
-  const allProjects = readdirSync(root);
+    const allProjects = readdirSync(root);
 
-  const appEntryPoints = allProjects.reduce(
-    /** @param { {in: string; out: string; }[] } acc */ (acc, dir) => {
-      for (const filename of ['index.ts', 'index.js', 'index.mjs']) {
-        if (existsSync(join(root, dir, filename))) {
-          return [...acc, { in: join(root, dir, filename), out: dir }];
+    entryPoints = allProjects.reduce(
+      /** @param { {in: string; out: string; }[] } acc */ (acc, dir) => {
+        for (const filename of ['index.ts', 'index.js', 'index.mjs']) {
+          if (existsSync(join(root, dir, filename))) {
+            return [...acc, { in: join(root, dir, filename), out: dir }];
+          }
         }
-      }
-      return acc;
-    },
-    []
-  );
-
-  const pluginEntryPoints = ['desktop', 'config'].map((dir) => join('src', dir, 'index.ts'));
+        return acc;
+      },
+      []
+    );
+  } else {
+    entryPoints = ['desktop', 'config'].map((dir) => join('src', dir, 'index.ts'));
+  }
 
   const context = await esbuild.context({
-    entryPoints: mode === 'app' ? appEntryPoints : pluginEntryPoints,
+    entryPoints,
     bundle: true,
     sourcemap: 'inline',
     platform: 'browser',

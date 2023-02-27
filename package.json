@@ -1,6 +1,6 @@
 {
   "name": "@konomi-app/kbuild",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "main": "index.mjs",
   "repository": "https://github.com/local-bias/kbuild.git",
   "author": "adachi",

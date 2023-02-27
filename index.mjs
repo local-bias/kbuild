@@ -21,6 +21,9 @@ const option = parseArgs({
 const env = option.positionals[0] ?? option.values.env;
 const mode = option.positionals[1] ?? option.values.mode;
 
+console.log('🐇 kbuild');
+console.table({ 環境: env, 実行モード: mode });
+
 if (env === 'dev') {
   buildWithEsbuild(mode);
 } else {

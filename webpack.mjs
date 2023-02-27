@@ -14,7 +14,7 @@ export const buildWithWebpack = async (mode) => {
   let entry = {};
   if (mode === 'app') {
     const appsRoot = join(cwd(), 'src', 'apps');
-    const allProjects = readdirSync(root);
+    const allProjects = readdirSync(appsRoot);
 
     entry = allProjects.reduce((acc, dir) => {
       for (const filename of ['index.ts', 'index.js', 'index.mjs']) {
