@@ -1,19 +1,19 @@
 {
   "name": "@konomi-app/kbuild",
-  "version": "0.3.3",
+  "version": "0.4.0",
   "main": "index.mjs",
   "repository": "https://github.com/local-bias/kbuild.git",
   "author": "adachi",
   "license": "MIT",
   "scripts": {
-    "dev": "node esbuild.dev.js",
+    "dev": "node esbuild.mjs",
     "prod": "webpack --config webpack.config.js"
   },
   "bin": {
-    "kbuild": "./index.js"
+    "kbuild": "./index.mjs"
   },
   "engines": {
-    "node": ">=14.0.0"
+    "node": ">=18.0.0"
   },
   "dependencies": {
     "esbuild": "^0.17.10",

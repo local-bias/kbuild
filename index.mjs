@@ -1,12 +1,30 @@
 #!/usr/bin/env node
-//@ts-check
-const [env] = process.argv.slice(2);
+import { parseArgs } from 'node:util';
+import webpack from 'webpack';
+import { run } from './esbuild.mjs';
+import config from './webpack.config.js';
+
+const option = parseArgs({
+  options: {
+    env: {
+      type: 'string',
+      default: 'prod',
+    },
+    mode: {
+      type: 'string',
+      default: 'app',
+      short: 'm',
+    },
+  },
+  allowPositionals: true,
+});
+
+const env = option.positionals[0] ?? option.values.env;
+const mode = option.positionals[1] ?? option.values.mode;
 
 if (env === 'dev') {
-  require('./esbuild.dev');
+  run(mode);
 } else {
-  const webpack = require('webpack');
-  const config = require('./webpack.config.js');
   webpack(config, (err, stats) => {
     if (err) {
       console.error(err);

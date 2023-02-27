@@ -1,9 +1,12 @@
-(async () => {
-  const esbuild = require('esbuild');
-  const { existsSync, readdirSync } = require('fs');
-  const { join } = require('path');
-  const { cwd } = require('process');
+import esbuild from 'esbuild';
+import { existsSync, readdirSync } from 'fs';
+import { join } from 'path';
+import { cwd } from 'process';
 
+/**
+ * @param { 'app' | 'plugin' } mode
+ */
+export const run = async (mode) => {
   const root = join(cwd(), 'src', 'apps');
 
   const allProjects = readdirSync(root);
@@ -32,4 +35,4 @@
   });
 
   context.watch();
-})();
+};
