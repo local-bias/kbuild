@@ -3,6 +3,7 @@ import esbuild from 'esbuild';
 import { existsSync, readdirSync } from 'fs';
 import { join } from 'path';
 import { cwd } from 'process';
+import sassPlugin from './esbuild-sass-plugin.mjs';
 
 /**
  * @param { 'app' | 'plugin' } mode
@@ -40,6 +41,7 @@ export const buildWithEsbuild = async (mode) => {
         name: 'on-end',
         setup: ({ onEnd }) => onEnd(() => console.log('🐇 変更を反映しました')),
       },
+      sassPlugin,
     ],
   });
 

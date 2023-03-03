@@ -50,15 +50,22 @@ export const buildWithWebpack = async (mode) => {
         path: resolve(cwd(), 'dist', 'prod'),
       },
       module: {
-        rules: [{ test: /\.tsx?$/, exclude, loader: 'ts-loader' }],
+        rules: [
+          { test: /\.tsx?$/, exclude, loader: 'ts-loader' },
+          { test: /\.css$/, use: ['style-loader', 'css-loader'] },
+          {
+            test: /\.scss$/,
+            use: [
+              'style-loader',
+              'css-loader',
+              { loader: 'sass-loader', options: { sassOptions: { outputStyle: 'expanded' } } },
+            ],
+          },
+        ],
       },
       optimization: {
         minimize: true,
-        minimizer: [
-          new TerserPlugin({
-            extractComments: false,
-          }),
-        ],
+        minimizer: [new TerserPlugin({ extractComments: false })],
       },
     },
     (err, stats) => {

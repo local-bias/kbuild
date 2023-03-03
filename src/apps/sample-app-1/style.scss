@@ -1,0 +1,9 @@
+.sample {
+  display: grid;
+  place-items: center;
+
+  .child {
+    display: flex;
+    align-items: center;
+  }
+}
