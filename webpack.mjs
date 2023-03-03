@@ -45,6 +45,7 @@ export const buildWithWebpack = async (mode) => {
           path: false,
         },
       },
+      cache: { type: 'filesystem' },
       output: {
         filename: '[name].js',
         path: resolve(cwd(), 'dist', 'prod'),
