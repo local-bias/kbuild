@@ -79,7 +79,9 @@ export const buildWithWebpack = async (mode) => {
             stats.compilation.errors.map((error) => [error.name, error.message, error.module])
           );
         } else {
-          console.log(`🐇 本番用ビルドが完了しました`);
+          console.log(
+            `[${new Date().toLocaleTimeString()}] }] [🐇 kbuild] 本番用ビルドが完了しました`
+          );
         }
       }
     }
