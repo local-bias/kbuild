@@ -41,7 +41,7 @@ export const buildWithEsbuild = async (mode) => {
         name: 'on-end',
         setup: ({ onEnd }) =>
           onEnd(() =>
-            console.log(`[${new Date().toLocaleTimeString()}] }] [🐇 kbuild] 変更を反映しました`)
+            console.log(`[${new Date().toLocaleTimeString()}] [🐇 kbuild] 変更を反映しました`)
           ),
       },
       sassPlugin,
