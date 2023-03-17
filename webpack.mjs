@@ -80,7 +80,7 @@ export const buildWithWebpack = async (mode) => {
           );
         } else {
           console.log(
-            `[${new Date().toLocaleTimeString()}] }] [🐇 kbuild] 本番用ビルドが完了しました`
+            `[${new Date().toLocaleTimeString()}] [🐇 kbuild] 本番用ビルドが完了しました`
           );
         }
       }
