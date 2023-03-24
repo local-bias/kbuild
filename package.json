@@ -1,15 +1,15 @@
 {
   "name": "@konomi-app/kbuild",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "main": "index.mjs",
   "repository": "https://github.com/local-bias/kbuild.git",
   "author": "adachi",
   "license": "MIT",
   "scripts": {
-    "app:dev": "node index.mjs --env dev --mode app",
-    "app:prod": "node index.mjs --env prod --mode app",
-    "plugin:dev": "node index.mjs --env dev --mode plugin",
-    "plugin:prod": "node index.mjs --env dev --mode plugin"
+    "app:dev": "node index.mjs --env dev --mode app --src-root sample",
+    "app:prod": "node index.mjs --env prod --mode app --src-root sample",
+    "plugin:dev": "node index.mjs --env dev --mode plugin --src-root sample",
+    "plugin:prod": "node index.mjs --env prod --mode plugin --src-root sample"
   },
   "bin": {
     "kbuild": "./index.mjs"

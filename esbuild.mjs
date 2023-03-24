@@ -6,12 +6,14 @@ import { cwd } from 'process';
 import sassPlugin from './esbuild-sass-plugin.mjs';
 
 /**
- * @param { 'app' | 'plugin' } mode
+ * @param { { mode: 'app' | 'plugin'; srcRoot: string; distRoot: string; } } props
  */
-export const buildWithEsbuild = async (mode) => {
+export const buildWithEsbuild = async (props) => {
+  const { mode, srcRoot, distRoot } = props;
+
   let entryPoints = [];
   if (mode === 'app') {
-    const root = join(cwd(), 'src', 'apps');
+    const root = join(cwd(), srcRoot, 'apps');
 
     const allProjects = readdirSync(root);
 
@@ -27,7 +29,7 @@ export const buildWithEsbuild = async (mode) => {
       []
     );
   } else {
-    entryPoints = ['desktop', 'config'].map((dir) => join('src', dir, 'index.ts'));
+    entryPoints = ['desktop', 'config'].map((dir) => join(srcRoot, dir, 'index.ts'));
   }
 
   const context = await esbuild.context({
@@ -35,7 +37,7 @@ export const buildWithEsbuild = async (mode) => {
     bundle: true,
     sourcemap: 'inline',
     platform: 'browser',
-    outdir: join('dist', 'dev'),
+    outdir: join(distRoot, 'dev'),
     plugins: [
       {
         name: 'on-end',

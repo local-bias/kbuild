@@ -6,14 +6,16 @@ import { cwd } from 'process';
 import TerserPlugin from 'terser-webpack-plugin';
 
 /**
- * @param { 'app' | 'plugin' } mode
+ * @param { { mode: 'app' | 'plugin'; srcRoot: string; distRoot: string } } props
  */
-export const buildWithWebpack = async (mode) => {
-  const root = join(cwd(), 'src');
+export const buildWithWebpack = async (props) => {
+  const { mode, srcRoot, distRoot } = props;
+
+  const root = join(cwd(), srcRoot);
   /** @type { Record<string, string> } */
   let entry = {};
   if (mode === 'app') {
-    const appsRoot = join(cwd(), 'src', 'apps');
+    const appsRoot = join(root, 'apps');
     const allProjects = readdirSync(appsRoot);
 
     entry = allProjects.reduce((acc, dir) => {
@@ -40,7 +42,7 @@ export const buildWithWebpack = async (mode) => {
       entry,
       resolve: {
         extensions: ['.ts', '.tsx', '.js', '.json'],
-        alias: { '@': resolve(cwd(), 'src') },
+        alias: { '@': resolve(root) },
         fallback: {
           path: false,
         },
@@ -48,7 +50,7 @@ export const buildWithWebpack = async (mode) => {
       cache: { type: 'filesystem' },
       output: {
         filename: '[name].js',
-        path: resolve(cwd(), 'dist', 'prod'),
+        path: resolve(cwd(), distRoot, 'prod'),
       },
       module: {
         rules: [
