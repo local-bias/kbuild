@@ -6,7 +6,7 @@ import { cwd } from 'process';
 import TerserPlugin from 'terser-webpack-plugin';
 
 /**
- * @param { { mode: 'app' | 'plugin'; srcRoot: string; distRoot: string } } props
+ * @param { { mode: 'app' | 'plugin'; srcRoot: string; distRoot: string; } } props
  */
 export const buildWithWebpack = async (props) => {
   const { mode, srcRoot, distRoot } = props;
@@ -50,7 +50,7 @@ export const buildWithWebpack = async (props) => {
       cache: { type: 'filesystem' },
       output: {
         filename: '[name].js',
-        path: resolve(cwd(), distRoot, 'prod'),
+        path: resolve(cwd(), ...distRoot.split(/[\\\/]/g)),
       },
       module: {
         rules: [

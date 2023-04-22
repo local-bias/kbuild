@@ -6,6 +6,8 @@ import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { cwd } from 'node:process';
 
+const DEFAULT_SRC_ROOT = 'src';
+
 const option = parseArgs({
   options: {
     env: {
@@ -19,11 +21,15 @@ const option = parseArgs({
     },
     'src-root': {
       type: 'string',
-      default: 'src',
+      default: DEFAULT_SRC_ROOT,
     },
-    'dist-root': {
+    'dev-root': {
       type: 'string',
-      default: 'dist',
+      default: 'dist/dev',
+    },
+    'prod-root': {
+      type: 'string',
+      default: 'dist/prod',
     },
   },
   allowPositionals: true,
@@ -32,7 +38,8 @@ const option = parseArgs({
 const env = option.positionals[0] ?? option.values.env;
 const mode = option.positionals[1] ?? option.values.mode;
 const srcRoot = option.values['src-root'];
-const distRoot = option.values['dist-root'];
+const devRoot = option.values['dev-root'];
+const prodRoot = option.values['prod-root'];
 
 if (!existsSync(join(cwd(), srcRoot))) {
   console.error(`🚨 ${srcRoot} ディレクトリが存在しません`);
@@ -44,7 +51,7 @@ console.log('🐇 kbuild');
 console.table({ 環境: env, 実行モード: mode });
 
 if (env === 'dev') {
-  buildWithEsbuild({ mode, srcRoot, distRoot });
+  buildWithEsbuild({ mode, srcRoot, distRoot: devRoot });
 } else {
-  buildWithWebpack({ mode, srcRoot, distRoot });
+  buildWithWebpack({ mode, srcRoot, distRoot: prodRoot });
 }
