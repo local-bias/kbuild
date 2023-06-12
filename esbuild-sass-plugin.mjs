@@ -1,5 +1,5 @@
 //@ts-check
-import sass from 'sass';
+import { compile } from 'sass';
 import { resolve } from 'path';
 
 const pluginName = 'esbuild-plugin-sass';
@@ -14,7 +14,7 @@ export default {
 
     build.onLoad({ filter: /.*/, namespace: pluginName }, async (args) => {
       try {
-        const result = sass.compile(args.path);
+        const result = compile(args.path);
         return {
           contents: result.css,
           loader: 'css',
