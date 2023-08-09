@@ -4,6 +4,7 @@ import { existsSync, readdirSync } from 'fs';
 import { join, resolve } from 'path';
 import { cwd } from 'process';
 import TerserPlugin from 'terser-webpack-plugin';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 
 /**
  * @param { { mode: 'app' | 'plugin'; srcRoot: string; distRoot: string; } } props
@@ -34,6 +35,9 @@ export const buildWithWebpack = async (props) => {
   }
 
   const exclude = /node_modules/;
+  const styleLoader = MiniCssExtractPlugin.loader;
+  /**@type { webpack.Configuration["plugins"] } */
+  const plugins = [new MiniCssExtractPlugin()];
 
   webpack(
     {
@@ -55,17 +59,18 @@ export const buildWithWebpack = async (props) => {
       module: {
         rules: [
           { test: /\.tsx?$/, exclude, loader: 'ts-loader' },
-          { test: /\.css$/, use: ['style-loader', 'css-loader'] },
+          { test: /\.css$/, use: [styleLoader, 'css-loader'] },
           {
             test: /\.scss$/,
             use: [
-              'style-loader',
+              styleLoader,
               'css-loader',
               { loader: 'sass-loader', options: { sassOptions: { outputStyle: 'expanded' } } },
             ],
           },
         ],
       },
+      plugins,
       optimization: {
         minimize: true,
         minimizer: [new TerserPlugin({ extractComments: false })],
