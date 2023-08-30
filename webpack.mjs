@@ -81,10 +81,12 @@ export const buildWithWebpack = async (props) => {
         console.error(err);
       } else {
         if (stats?.compilation.errors.length) {
-          console.error(`⚠ 本番用ビルドでエラーが発生しました`);
           console.error(
-            stats.compilation.errors.map((error) => [error.name, error.message, error.module])
+            `⚠ 本番用ビルドでエラーが発生しました(${stats.compilation.errors.length}件)`
           );
+          stats.compilation.errors.forEach((error) => {
+            console.error(error.message);
+          });
         } else {
           console.log(
             `[${new Date().toLocaleTimeString()}] [🐇 kbuild] 本番用ビルドが完了しました`
