@@ -1,4 +1,5 @@
 //@ts-check
+import chalk from 'chalk';
 import esbuild from 'esbuild';
 import { existsSync, readdirSync } from 'fs';
 import { join } from 'path';
@@ -43,7 +44,11 @@ export const buildWithEsbuild = async (props) => {
         name: 'on-end',
         setup: ({ onEnd }) =>
           onEnd(() =>
-            console.log(`[${new Date().toLocaleTimeString()}] [🐇 kbuild] 変更を反映しました`)
+            console.log(
+              chalk.hex('#d1d5db')(`${new Date().toLocaleTimeString()} `) +
+                chalk.cyan(`[content] `) +
+                `変更を反映しました`
+            )
           ),
       },
       sassPlugin,

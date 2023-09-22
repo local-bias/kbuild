@@ -1,10 +1,11 @@
 #!/usr/bin/env node
-import { parseArgs } from 'node:util';
-import { buildWithEsbuild } from './esbuild.mjs';
-import { buildWithWebpack } from './webpack.mjs';
+import chalk from 'chalk';
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { cwd } from 'node:process';
+import { parseArgs } from 'node:util';
+import { buildWithEsbuild } from './esbuild.mjs';
+import { buildWithWebpack } from './webpack.mjs';
 
 const DEFAULT_SRC_ROOT = 'src';
 
@@ -47,8 +48,14 @@ if (!existsSync(join(cwd(), srcRoot))) {
   process.exit(1);
 }
 
-console.log('🐇 kbuild');
-console.table({ 環境: env, 実行モード: mode });
+console.log(
+  chalk.bgHex('#15803d')(' kbuild ') +
+    '   環境: ' +
+    chalk.bold(env) +
+    ', 実行モード: ' +
+    chalk.bold(mode)
+);
+console.log();
 
 if (env === 'dev') {
   buildWithEsbuild({ mode, srcRoot, distRoot: devRoot });
