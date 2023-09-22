@@ -1,10 +1,10 @@
 //@ts-check
-import webpack from 'webpack';
 import { existsSync, readdirSync } from 'fs';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import { join, resolve } from 'path';
 import { cwd } from 'process';
 import TerserPlugin from 'terser-webpack-plugin';
-import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import webpack from 'webpack';
 
 /**
  * @param { { mode: 'app' | 'plugin'; srcRoot: string; distRoot: string; } } props
