@@ -1,6 +1,6 @@
 {
   "name": "@konomi-app/kbuild",
-  "version": "2.1.0",
+  "version": "3.0.0",
   "main": "index.mjs",
   "repository": "https://github.com/local-bias/kbuild.git",
   "author": "adachi",
@@ -28,6 +28,7 @@
     "style-loader": "^3.3.3",
     "terser-webpack-plugin": "^5.3.9",
     "ts-loader": "^9.4.4",
+    "tsconfig-paths-webpack-plugin": "^4.1.0",
     "webpack": "^5.88.2"
   },
   "prettier": {

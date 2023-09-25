@@ -5,6 +5,8 @@ import { join, resolve } from 'path';
 import { cwd } from 'process';
 import TerserPlugin from 'terser-webpack-plugin';
 import webpack from 'webpack';
+import chalk from 'chalk';
+import { TsconfigPathsPlugin } from 'tsconfig-paths-webpack-plugin';
 
 /**
  * @param { { mode: 'app' | 'plugin'; srcRoot: string; distRoot: string; } } props
@@ -36,8 +38,6 @@ export const buildWithWebpack = async (props) => {
 
   const exclude = /node_modules/;
   const styleLoader = MiniCssExtractPlugin.loader;
-  /**@type { webpack.Configuration["plugins"] } */
-  const plugins = [new MiniCssExtractPlugin()];
 
   webpack(
     {
@@ -46,10 +46,10 @@ export const buildWithWebpack = async (props) => {
       entry,
       resolve: {
         extensions: ['.ts', '.tsx', '.js', '.json'],
-        alias: { '@': resolve(root) },
         fallback: {
           path: false,
         },
+        plugins: [new TsconfigPathsPlugin({ configFile: join(cwd(), 'tsconfig.json') })],
       },
       cache: { type: 'filesystem' },
       output: {
@@ -70,7 +70,7 @@ export const buildWithWebpack = async (props) => {
           },
         ],
       },
-      plugins,
+      plugins: [new MiniCssExtractPlugin()],
       optimization: {
         minimize: true,
         minimizer: [new TerserPlugin({ extractComments: false })],
@@ -89,7 +89,9 @@ export const buildWithWebpack = async (props) => {
           });
         } else {
           console.log(
-            `[${new Date().toLocaleTimeString()}] [🐇 kbuild] 本番用ビルドが完了しました`
+            chalk.hex('#d1d5db')(`${new Date().toLocaleTimeString()} `) +
+              chalk.cyan(`[content] `) +
+              `本番用ビルドが完了しました`
           );
         }
       }
