@@ -33,33 +33,27 @@ export const buildWithEsbuild = async (props) => {
     entryPoints = ['desktop', 'config'].map((dir) => join(srcRoot, dir, 'index.ts'));
   }
 
-  const contexts = await Promise.all(
-    entryPoints.map((entry) =>
-      esbuild.context({
-        entryPoints: [entry],
-        bundle: true,
-        sourcemap: 'inline',
-        platform: 'browser',
-        outdir: join(...distRoot.split(/[\\\/]/g)),
-        plugins: [
-          {
-            name: 'on-end',
-            setup: ({ onEnd }) =>
-              onEnd(() =>
-                console.log(
-                  chalk.hex('#d1d5db')(`${new Date().toLocaleTimeString()} `) +
-                    chalk.cyan(`[${typeof entry === 'string' ? entry : entry.out}-content] `) +
-                    `変更を反映しました`
-                )
-              ),
-          },
-          sassPlugin,
-        ],
-      })
-    )
-  );
-
-  contexts.forEach((context) => {
-    context.watch();
+  const context = await esbuild.context({
+    entryPoints,
+    bundle: true,
+    sourcemap: 'inline',
+    platform: 'browser',
+    outdir: join(...distRoot.split(/[\\\/]/g)),
+    plugins: [
+      {
+        name: 'on-end',
+        setup: ({ onEnd }) =>
+          onEnd(() =>
+            console.log(
+              chalk.hex('#d1d5db')(`${new Date().toLocaleTimeString()} `) +
+                chalk.cyan(`[content] `) +
+                `変更を反映しました`
+            )
+          ),
+      },
+      sassPlugin,
+    ],
   });
+
+  context.watch();
 };
